@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2">
+<title>Z'S KARAM HOTEL</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Press+Start+2P&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#c9a14a;--gold2:#e7c878;--line:#222a36;}
+html,body{height:100%;background:#06080c;color:#e7ecf3;font-family:'Inter',system-ui,sans-serif;overflow:hidden}
+#wrap{position:fixed;inset:0}
+/* ---- GTA-style title: crossfading before/after hero renders ---- */
+.bgstage{position:absolute;inset:0;z-index:0;overflow:hidden;background:#05060a}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.7s ease;filter:brightness(.66) contrast(1.08) saturate(1.14)}
+.bg.on{opacity:1;animation:kb 8s ease-out both}
+@keyframes kb{from{transform:scale(1.03)}to{transform:scale(1.13)}}
+.scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:
+  radial-gradient(130% 100% at 50% 36%, rgba(6,8,12,0) 22%, rgba(6,8,12,.5) 66%, rgba(4,5,9,.92) 100%),
+  linear-gradient(180deg, rgba(5,7,11,.8) 0%, rgba(6,8,12,.03) 22%, rgba(6,8,12,.02) 52%, rgba(4,5,9,.9) 100%)}
+.inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:5vh 18px 4vh;text-align:center}
+.brandlogo{height:clamp(116px,18vh,186px);width:auto;filter:drop-shadow(0 6px 30px rgba(0,0,0,.85)) drop-shadow(0 0 26px rgba(231,200,120,.26));animation:fadeDown 1s ease both}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.28em;color:#d7deec;text-shadow:0 1px 12px rgba(0,0,0,.95);margin-top:13px;animation:fadeDown 1.2s ease both}
+/* vertical AAA-style menu (no circles) */
+.menu{display:flex;flex-direction:column;gap:11px;margin:auto 0;width:min(440px,88vw)}
+.mitem{position:relative;display:flex;align-items:center;gap:16px;padding:15px 22px;border:1px solid rgba(255,255,255,.1);border-left:3px solid transparent;border-radius:11px;
+  background:rgba(8,11,18,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:.18s;text-align:left;animation:slideIn .7s ease both}
+.mitem:nth-child(1){animation-delay:.1s}.mitem:nth-child(2){animation-delay:.22s}.mitem:nth-child(3){animation-delay:.34s}
+.mitem:hover{border-left-color:var(--gold2);background:rgba(18,23,34,.72);transform:translateX(7px);box-shadow:0 12px 34px rgba(0,0,0,.5)}
+.mitem .mi{font-size:23px;color:var(--gold2);width:30px;text-align:center;text-shadow:0 0 18px rgba(231,200,120,.4)}
+.mitem .mtx{flex:1}
+.mitem .mt{display:block;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;letter-spacing:.09em;color:#fff}
+.mitem .mc{display:block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.12em;color:#9fb0c8;margin-top:4px}
+.mitem .mgo{font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--gold2);opacity:0;transform:translateX(-6px);transition:.18s}
+.mitem:hover .mgo{opacity:1;transform:none}
+.mitem.primary{border:1px solid rgba(231,200,120,.5);border-left:3px solid var(--gold2);background:linear-gradient(90deg,rgba(201,161,74,.26),rgba(8,11,18,.5))}
+.mitem.primary .mt{color:var(--gold2)}.mitem.primary .mgo{opacity:1}
+@keyframes slideIn{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.botrow{display:flex;flex-direction:column;align-items:center;gap:11px}
+.loccap{display:flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.95);padding:7px 16px;border:1px solid rgba(231,200,120,.32);border-radius:30px;background:rgba(6,8,12,.42);backdrop-filter:blur(6px)}
+.loccap.swap{animation:capIn .7s ease}
+@keyframes capIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.loccap .dot{width:8px;height:8px;border-radius:50%;background:var(--gold2);box-shadow:0 0 10px var(--gold2);animation:blinkH 1.6s infinite}
+.starthint{font-family:'Press Start 2P',monospace;font-size:9px;letter-spacing:.12em;color:var(--gold2);text-shadow:0 0 16px rgba(231,200,120,.55);animation:blinkH 1.5s steps(2) infinite}
+@keyframes blinkH{50%{opacity:.22}}
+/* ---- SURVEY — Game Boy live feed (one fullscreen autoplay, loops forever) ---- */
+#surveyFs{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;
+  background:#07080b;background-image:radial-gradient(circle at 50% 28%,rgba(227,192,127,.07),transparent 62%);font-family:'Press Start 2P',monospace}
+#surveyFs.show{display:flex}
+.gbconsole{position:relative;width:min(96%,1100px);background:linear-gradient(#191d25,#0f1218);border:1px solid #2a2f3a;border-radius:14px;
+  box-shadow:0 0 0 1px rgba(227,192,127,.22),0 24px 70px rgba(0,0,0,.7);padding:16px 16px 10px}
+.gbtop{display:flex;align-items:center;gap:10px;font-size:9px;letter-spacing:.08em;color:#e3c07f;margin-bottom:10px;text-transform:uppercase}
+.gbtop .rec{display:flex;align-items:center;gap:6px;color:#e08a7a}
+.gbtop .rec b{width:9px;height:9px;border-radius:50%;background:#e0463c;display:inline-block;box-shadow:0 0 8px rgba(224,70,60,.8);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.2}}
+#btnClose{margin-left:auto;font-family:'Press Start 2P',monospace;font-size:8px;color:#e3c07f;background:rgba(227,192,127,.08);border:1px solid rgba(227,192,127,.35);border-radius:6px;padding:8px 10px;cursor:pointer}
+#btnClose:hover{background:rgba(227,192,127,.2);color:#fff}
+.gbscreen{position:relative;background:#06070a;border:1px solid #2a2f3a;border-radius:8px;overflow:hidden;aspect-ratio:16/9;box-shadow:inset 0 0 60px rgba(0,0,0,.6)}
+.gbscreen video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:auto;filter:contrast(1.05) saturate(1.05)}
+.gbscan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0px,rgba(0,0,0,.10) 1px,transparent 2px,transparent 4px);z-index:2}
+.gbcap{position:absolute;left:0;right:0;bottom:0;z-index:3;background:linear-gradient(0deg,rgba(6,7,10,.94),transparent);
+  color:#e3c07f;font-size:9px;letter-spacing:.06em;padding:14px 12px 9px;text-shadow:0 1px 2px #000}
+.gbnow{position:absolute;top:10px;left:10px;z-index:3;font-size:8px;color:#0a0c10;background:rgba(227,192,127,.92);padding:5px 8px;border-radius:4px;letter-spacing:.1em;font-weight:700}
+.gbstrip{display:flex;gap:6px;margin-top:10px;justify-content:center;flex-wrap:wrap}
+.gbpip{width:30px;height:10px;border:1px solid rgba(227,192,127,.4);border-radius:2px;background:rgba(227,192,127,.12)}
+.gbpip.on{background:#e3c07f;box-shadow:0 0 8px rgba(227,192,127,.7)}
+.gbfoot{text-align:center;font-size:7px;color:#6c7280;letter-spacing:.1em;margin-top:9px}
+.gbctrl{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.gbctrl button{font-family:'Press Start 2P',monospace;font-size:9px;color:#e3c07f;background:rgba(227,192,127,.07);border:1px solid rgba(227,192,127,.3);border-radius:6px;padding:9px 11px;cursor:pointer}
+.gbctrl button:hover{background:rgba(227,192,127,.18);color:#fff}
+@media(max-width:760px){.brandlogo{height:clamp(96px,15vh,140px)}.circ .cl{font-size:11px}.tag{font-size:8px;letter-spacing:.18em}.loccap{font-size:9px}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="bgstage"><img class="bg" id="bgA" alt=""><img class="bg" id="bgB" alt=""></div>
+  <div class="scrim"></div>
+  <div class="inner">
+    <img class="brandlogo" src="media/karam_logo.png" alt="Z'S KARAM HOTEL — Liverpool">
+    <div class="tag">GAMING &amp; COMIC-CON SANCTUARY · 20–34 CASTLE STREET · LIVERPOOL</div>
+    <div class="menu">
+      <button class="mitem primary" id="btnModel"><span class="mi">▶</span><span class="mtx"><span class="mt">PLAY 3D</span><span class="mc">WALK THE BUILDING MODEL</span></span><span class="mgo">›</span></button>
+      <button class="mitem" id="btnPlans"><span class="mi">▦</span><span class="mtx"><span class="mt">PLANS</span><span class="mc">EXISTING vs PROPOSED · ALL FLOORS</span></span><span class="mgo">›</span></button>
+      <button class="mitem" id="btnSurvey"><span class="mi">◉</span><span class="mtx"><span class="mt">SURVEY</span><span class="mc">LIVE SITE FILM FEED</span></span><span class="mgo">›</span></button>
+    </div>
+    <div class="botrow">
+      <div class="loccap" id="loccap"><span class="dot"></span><span id="locname">GREAT HALL · PROPOSED</span></div>
+      <div class="starthint">▸ SELECT TO BEGIN ◂</div>
+    </div>
+  </div>
+
+  <!-- SURVEY — Game Boy live feed -->
+  <div id="surveyFs">
+    <div class="gbconsole">
+      <div class="gbtop"><span class="rec"><b></b>LIVE</span> Z'S KARAM — SITE SURVEY FEED <button id="btnClose">✕ EXIT</button></div>
+      <div class="gbscreen">
+        <video id="surveyVid" playsinline preload="auto"></video>
+        <div class="gbscan"></div>
+        <div class="gbnow" id="gbnow">PLAY 1/6</div>
+        <div class="gbcap" id="gbcap"></div>
+      </div>
+      <div class="gbstrip" id="gbstrip"></div>
+      <div class="gbctrl">
+        <button id="gbPrev">&lt;&lt; PREV</button>
+        <button id="gbPlay">|| PAUSE</button>
+        <button id="gbNext">NEXT &gt;&gt;</button>
+        <button id="gbMute">SOUND: ON</button>
+      </div>
+      <div class="gbfoot">AUTO-PLAYING · CONTINUOUS LOOP · PRESS EXIT TO STOP</div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('btnModel').onclick=()=>{location.href='MODEL.html';};
+document.getElementById('btnPlans').onclick=()=>{location.href='PLANS.html';};
+
+// ---- GTA-style title slideshow: crossfade the before/after hero renders (no floorplans) ----
+const SLIDES=[
+  ['renders/hallA_04.jpg','GREAT HALL · PROPOSED'],
+  ['renders/cafeA_00.jpg','HONEYDUKES CAFÉ · PROPOSED'],
+  ['renders/hallB_03.jpg','GREAT HALL · EXISTING — FORMER NATWEST'],
+  ['renders/hallA_02.jpg','GREAT HALL · GAMING FLOOR'],
+  ['renders/cafeB_00.jpg','GROUND FLOOR · EXISTING'],
+  ['renders/cafeA_03.jpg','HONEYDUKES · SWEET-SHOP COUNTER'],
+  ['renders/hallA_00.jpg','RECEPTION · KNIGHT BUS'],
+];
+(function(){
+  const A=document.getElementById('bgA'),B=document.getElementById('bgB'),
+        cap=document.getElementById('locname'),box=document.getElementById('loccap');
+  let front=A,back=B,i=0;
+  SLIDES.forEach(s=>{const im=new Image();im.src=s[0];});         // preload
+  const setCap=t=>{cap.textContent=t;box.classList.remove('swap');void box.offsetWidth;box.classList.add('swap');};
+  A.src=SLIDES[0][0]; A.onload=()=>A.classList.add('on'); setCap(SLIDES[0][1]);
+  setInterval(()=>{ i=(i+1)%SLIDES.length; const s=SLIDES[i];
+    const go=()=>{ back.classList.add('on'); front.classList.remove('on'); const t=front; front=back; back=t; setCap(s[1]); };
+    back.onload=()=>{ back.onload=null; go(); };
+    back.src=s[0];
+    if(back.complete && back.naturalWidth){ back.onload=null; go(); }   // cached → swap now
+  },6000);
+})();
+const CLIPS=[
+  ['clip06','GREAT HALL — INTERIOR WALKTHROUGH'],
+  ['clip02','SCENE 2 · SITE ANALYSIS — INTERIOR SURVEY'],
+  ['clip03','SCENE 2 · SITE ANALYSIS — GAMING-LIT SPACE'],
+  ['clip04','SCENE 3 · SITE ANALYSIS — BUILDING CONTEXT'],
+  ['clip01','SCENE 1 · SITE ANALYSIS'],
+  ['clip05','SCENE 1 · CASTLE STREET AT NIGHT']
+];
+const surveyVid=document.getElementById('surveyVid');
+const gbstrip=document.getElementById('gbstrip');
+gbstrip.innerHTML=CLIPS.map((_,i)=>'<span class="gbpip" data-i="'+i+'"></span>').join('');
+let ci=0, surveyOn=false;
+function playClip(){
+  surveyVid.src='media/survey/'+CLIPS[ci][0]+'.mp4';
+  document.getElementById('gbcap').textContent='◍ '+CLIPS[ci][1];
+  document.getElementById('gbnow').textContent='PLAY '+(ci+1)+'/'+CLIPS.length;
+  gbstrip.querySelectorAll('.gbpip').forEach((p,i)=>p.classList.toggle('on',i===ci));
+  const pb=document.getElementById('gbPlay'); if(pb)pb.textContent='|| PAUSE';
+  const go=()=>surveyVid.play().catch(()=>{ surveyVid.muted=true; surveyVid.play().catch(()=>{}); });
+  go();
+}
+surveyVid.addEventListener('ended',()=>{ if(!surveyOn)return; ci=(ci+1)%CLIPS.length; playClip(); });   // next → loop forever
+surveyVid.addEventListener('error',()=>{ if(!surveyOn)return; ci=(ci+1)%CLIPS.length; playClip(); });
+document.getElementById('btnSurvey').onclick=()=>{
+  const fs=document.getElementById('surveyFs'); fs.classList.add('show');
+  surveyOn=true; surveyVid.muted=false; ci=0; playClip();
+};
+document.getElementById('btnClose').onclick=()=>{ surveyOn=false;
+  document.getElementById('surveyFs').classList.remove('show'); surveyVid.pause(); surveyVid.removeAttribute('src'); surveyVid.load(); };
+// playback controls
+document.getElementById('gbPrev').onclick=()=>{ ci=(ci-1+CLIPS.length)%CLIPS.length; playClip(); };
+document.getElementById('gbNext').onclick=()=>{ ci=(ci+1)%CLIPS.length; playClip(); };
+document.getElementById('gbPlay').onclick=function(){ if(surveyVid.paused){surveyVid.play();this.textContent='|| PAUSE';} else {surveyVid.pause();this.textContent='|> PLAY';} };
+document.getElementById('gbMute').onclick=function(){ surveyVid.muted=!surveyVid.muted; this.textContent='SOUND: '+(surveyVid.muted?'OFF':'ON'); };
+</script>
+</body>
+</html>

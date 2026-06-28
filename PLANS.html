@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Z'S KARAM HOTEL — Existing vs Proposed</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080a0f;--bg2:#0c1019;--panel:#0d111a;--panel2:#11161f;--hair:#1b2230;--line:#27303f;
+ --ink:#eff3f9;--ink2:#9aa7bb;--ink3:#5f6b80;--gold:#c9a14a;--gold2:#ecca7e;--emer:#46c486;--red:#e6907f;--green:#7bd6a2;}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:13px;overflow:hidden;
+ background-image:radial-gradient(1100px 560px at 72% -12%,rgba(201,161,74,.06),transparent 60%),radial-gradient(900px 480px at -5% 112%,rgba(70,196,134,.045),transparent 55%)}
+.app{display:grid;grid-template-rows:auto 1fr;height:100vh}
+/* header HUD */
+header{display:flex;align-items:center;gap:18px;padding:0 18px;height:56px;background:linear-gradient(180deg,rgba(13,17,26,.95),rgba(8,10,15,.96));border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.brand{display:flex;align-items:center;gap:11px}
+.brand .mark{width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--gold2);font-size:14px;border:1px solid rgba(201,161,74,.4);border-radius:7px;background:rgba(201,161,74,.07)}
+header .t{font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.17em;font-size:13px;color:var(--gold2)}
+header .s{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.13em;color:var(--ink3);margin-top:3px}
+.hud{margin-left:auto;display:flex;align-items:center;gap:10px}
+.hudc{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--ink2);padding:6px 10px;border:1px solid var(--hair);border-radius:6px;background:rgba(8,10,15,.4)}
+.live{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--emer);padding:6px 10px;border:1px solid rgba(70,196,134,.3);border-radius:6px}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--emer);box-shadow:0 0 8px var(--emer);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+header a.hub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink2);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:8px 12px;transition:.15s}
+header a.hub:hover{border-color:var(--gold);color:var(--gold2);background:rgba(201,161,74,.08)}
+.body{display:grid;grid-template-columns:202px 1fr 314px;min-height:0}
+@media(max-width:1000px){.body{grid-template-columns:152px 1fr}.rail-right{display:none}.hud{display:none}}
+/* floor rail */
+.rail{background:linear-gradient(180deg,#0b0e15,#090b11);border-right:1px solid var(--line);overflow-y:auto;padding:13px 9px}
+.rail h3{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.2em;color:var(--ink3);text-transform:uppercase;padding:6px 8px 11px}
+.fl{position:relative;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:9px 11px 9px 14px;border:1px solid transparent;border-radius:8px;cursor:pointer;margin-bottom:3px;transition:.14s}
+.fl:before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:0;background:var(--gold2);border-radius:0 2px 2px 0;transition:.18s}
+.fl:hover{background:var(--panel)}
+.fl.on{background:linear-gradient(90deg,rgba(201,161,74,.15),rgba(201,161,74,.02));border-color:rgba(201,161,74,.42)}
+.fl.on:before{height:58%}
+.fl .n{font-size:12px;color:var(--ink2);font-weight:500;letter-spacing:.01em}
+.fl.on .n{color:var(--gold2)}
+.fl .lv{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ink3)}
+.fl.on .lv{color:var(--gold)}
+/* stage */
+.stage{position:relative;background:#06080c;overflow:hidden;display:flex;flex-direction:column}
+.modebar{display:flex;gap:6px;padding:11px 14px;border-bottom:1px solid var(--line);align-items:center;background:rgba(10,13,19,.55)}
+.seg{display:flex;gap:3px;padding:3px;border:1px solid var(--hair);border-radius:9px;background:rgba(8,10,15,.55)}
+.mode{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;padding:7px 13px;border:1px solid transparent;border-radius:6px;color:var(--ink2);cursor:pointer;background:none;transition:.14s}
+.mode:hover{color:var(--ink)}
+.mode.on{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#0a0c10;font-weight:700;box-shadow:0 2px 12px rgba(201,161,74,.32)}
+#circBtn{margin-left:10px;border:1px solid var(--hair);border-radius:8px;color:var(--ink2)}
+#circBtn.on{background:linear-gradient(180deg,#56d695,#2ea36a);color:#04210f;border-color:#2ea36a;font-weight:700;box-shadow:0 2px 12px rgba(46,163,106,.35)}
+.modebar .title{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.07em;color:var(--ink2)}
+.view{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+ background:radial-gradient(125% 125% at 50% 28%,#0c1019,#06080c 76%)}
+.view:before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.55;
+ background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+ background-size:48px 48px;-webkit-mask:radial-gradient(circle at 50% 48%,#000,transparent 92%);mask:radial-gradient(circle at 50% 48%,#000,transparent 92%)}
+.bracket{position:absolute;width:26px;height:26px;border:2px solid rgba(201,161,74,.45);z-index:6;pointer-events:none}
+.bracket.tl{top:14px;left:14px;border-right:0;border-bottom:0}
+.bracket.tr{top:14px;right:14px;border-left:0;border-bottom:0}
+.bracket.bl{bottom:14px;left:14px;border-right:0;border-top:0}
+.bracket.br{bottom:14px;right:14px;border-left:0;border-top:0}
+.dwgtag{position:absolute;left:18px;bottom:16px;z-index:6;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.13em;color:var(--ink2);background:rgba(8,10,15,.72);border:1px solid var(--hair);padding:6px 10px;border-radius:6px}
+.dwgtag b{color:var(--gold2)}
+.scalenote{position:absolute;right:18px;bottom:16px;z-index:6;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--ink3)}
+.imgwrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+.imgwrap img{max-width:94%;max-height:94%;object-fit:contain;background:#fff;border-radius:3px;box-shadow:0 22px 64px rgba(0,0,0,.66),0 0 0 1px rgba(201,161,74,.12);user-select:none;-webkit-user-drag:none}
+/* compare wipe */
+#cmp{position:absolute;inset:0;display:none;z-index:2}
+#cmp.on{display:block}
+#cmp .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#cmp .layer img{max-width:94%;max-height:94%;object-fit:contain;background:#fff;border-radius:3px;box-shadow:0 22px 64px rgba(0,0,0,.6)}
+/* interior before/after = two different photos: both fill the identical frame (cover) so the wipe lines up exactly */
+#cmp.interior .layer img{max-width:96%;max-height:96%;width:96%;height:96%;object-fit:cover;border-radius:3px;background:#06070a}
+#cmp .top{clip-path:inset(0 0 0 var(--wipe,50%))}
+#cmp .divider{position:absolute;top:0;bottom:0;left:50%;width:2px;background:linear-gradient(180deg,transparent,var(--gold2) 12%,var(--gold2) 88%,transparent);box-shadow:0 0 14px rgba(231,200,120,.55);cursor:ew-resize;z-index:5}
+#cmp .divider .knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,var(--gold2),var(--gold));color:#0a0c10;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;box-shadow:0 4px 16px rgba(0,0,0,.5)}
+#cmp .tagE,#cmp .tagP{position:absolute;top:14px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;padding:6px 10px;border-radius:6px;z-index:4}
+#cmp .tagE{left:16px;background:rgba(230,144,127,.16);color:var(--red);border:1px solid rgba(230,144,127,.4)}
+#cmp .tagP{right:16px;background:rgba(123,214,162,.15);color:var(--green);border:1px solid rgba(123,214,162,.4)}
+.circlayer{position:absolute;top:50%;left:50%;max-width:94%;max-height:94%;object-fit:contain;transform-origin:center;pointer-events:none;display:none;z-index:4;border-radius:3px}
+.circlayer.on{display:block;animation:circpulse 2.6s ease-in-out infinite}
+@keyframes circpulse{0%,100%{opacity:.55}50%{opacity:1}}
+.empty{color:var(--ink3);font-family:'JetBrains Mono',monospace;font-size:11px;text-align:center;line-height:1.7;max-width:60%;z-index:3}
+.zoomctl{position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:7;display:flex;flex-direction:column;gap:6px}
+.zoomctl button{width:32px;height:32px;border:1px solid var(--hair);border-radius:8px;background:rgba(13,17,26,.85);color:var(--ink2);font-size:14px;cursor:pointer;backdrop-filter:blur(4px);transition:.14s}
+.zoomctl button:hover{border-color:var(--gold);color:var(--gold2)}
+/* right programme */
+.rail-right{background:linear-gradient(180deg,#0b0e15,#090b11);border-left:1px solid var(--line);overflow-y:auto;padding:16px}
+.rail-right h2{font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.03em;color:var(--ink)}
+.rail-right .lvl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;color:var(--gold2);margin:3px 0 14px;padding-bottom:12px;border-bottom:1px solid var(--hair)}
+.trans{display:grid;gap:9px;margin-bottom:16px}
+.trans .box{position:relative;border:1px solid var(--hair);border-radius:9px;padding:11px 12px;background:linear-gradient(180deg,var(--panel),rgba(13,17,26,.4))}
+.trans .box.ex{border-left:3px solid var(--red)}
+.trans .box.pr{border-left:3px solid var(--green)}
+.trans .lab{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px}
+.trans .ex .lab{color:var(--red)}.trans .pr .lab{color:var(--green)}
+.trans .v{font-size:12px;color:var(--ink2);line-height:1.55}
+.rail-right h4{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--ink3);text-transform:uppercase;margin:16px 0 9px}
+.rm{padding:8px 0;border-bottom:1px solid var(--hair)}
+.rm .rmtop{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;color:var(--ink)}
+.rm .a{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold2);white-space:nowrap}
+.rm .bar{margin-top:6px;height:4px;border-radius:3px;background:rgba(255,255,255,.05);overflow:hidden}
+.rm .bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.note{font-size:10px;color:var(--ink3);line-height:1.55;margin-top:12px;font-style:italic;padding-top:10px;border-top:1px solid var(--hair)}
+.fade{animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><span class="mark">◭</span><div><div class="t">Z'S KARAM HOTEL</div><div class="s">EXISTING vs PROPOSED · 20–34 CASTLE STREET · LIVERPOOL</div></div></div>
+    <div class="hud">
+      <span class="hudc">53.4066°N · 2.9920°W</span>
+      <span class="hudc">LISTED · GRADE II</span>
+      <span class="live"><i></i>LIVE MODEL</span>
+    </div>
+    <a class="hub" href="index.html">‹ HUB</a>
+  </header>
+  <div class="body">
+    <nav class="rail"><h3>Floor / Drawing</h3><div id="floors"></div></nav>
+    <main class="stage">
+      <div class="modebar">
+        <div class="seg">
+          <button class="mode" data-m="existing">◷ EXISTING</button>
+          <button class="mode on" data-m="compare">⇆ COMPARE</button>
+          <button class="mode" data-m="proposed">◆ PROPOSED</button>
+        </div>
+        <button class="mode" id="circBtn">◉ CIRCULATION</button>
+        <span class="title" id="vtitle"></span>
+      </div>
+      <div class="view" id="view">
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="dwgtag" id="dwgtag"></div>
+        <div class="scalenote">INDICATIVE · NOT TO SCALE</div>
+        <div class="imgwrap" id="single" style="display:none"><img id="img" alt=""><img id="circImg" class="circlayer" alt=""></div>
+        <div id="cmp" class="on">
+          <div class="layer base"><img id="cmpEx" alt="existing"></div>
+          <div class="layer top"><img id="cmpPr" alt="proposed"></div>
+          <span class="tagE">EXISTING</span><span class="tagP">PROPOSED</span>
+          <div class="divider" id="divider"><div class="knob">⇆</div></div>
+        </div>
+        <div class="empty" id="empty" style="display:none"></div>
+        <div class="zoomctl"><button id="zi">+</button><button id="zo">−</button><button id="zf">⤢</button></div>
+      </div>
+    </main>
+    <aside class="rail-right" id="info"></aside>
+  </div>
+</div>
+
+<script>
+const F=[
+ {id:'basement',name:'Basement',lv:'−4.0 m',ex:'plans/existing/basement.jpg',pr:null,
+  exUse:'Former bank strong-rooms, vaults and plant.',prUse:'Plant & back-of-house servicing the hotel above. Outside the public-facing scheme.',
+  rooms:[]},
+ {id:'ground',name:'Ground Floor',lv:'0.0 m',ex:'plans/existing/ground.jpg',pr:'plans/proposed/ground.jpg',circ:'plans/circ/ground.jpg',
+  exUse:'NatWest banking hall — Business Tellers, Counting House, Safe, Waiting Area, lift cores.',
+  prUse:'Reception Great Hall + Honeydukes Café + Moaning Myrtle accessible WC + flexible commercial. Listed grand hall retained; all fit-out reversible.',
+  rooms:[['Reception Great Hall','170 m²'],['Honeydukes Café','112 m²'],['Moaning Myrtle WC (accessible)','50 m²'],['Flexible Commercial ×2','15 m² ea']]},
+ {id:'hall-int',name:'Great Hall ◍',lv:'Interior',ex:'renders/hallB_03.jpg',pr:'renders/hallA_04.jpg',interior:1,
+  exUse:'The listed NatWest banking hall as existing — an empty volume under the glazed dome.',
+  prUse:'Reception Great Hall — the Knight Bus reception, neon-lit dome and long banquet tables for dining & board games.',
+  rooms:[['Reception Great Hall','170 m²']]},
+ {id:'cafe-int',name:'Honeydukes ◍',lv:'Interior',ex:'renders/cafeB_00.jpg',pr:'renders/cafeA_00.jpg',interior:1,
+  exUse:'The existing ground-floor space before intervention.',
+  prUse:'Honeydukes Café — arcade-sweetshop with candy-jar shelving, neon signage and bespoke timber counters.',
+  rooms:[['Honeydukes Café','112 m²']]},
+ {id:'mezzanine',name:'Mezzanine',lv:'+4.2 m',ex:'plans/existing/mezzanine.jpg',pr:'plans/proposed/mezzanine.jpg',circ:'plans/circ/mezzanine.jpg',
+  exUse:'Bank mezzanine offices overlooking the hall.',
+  prUse:'Relaxing area & Breakfast Hall on lightweight partitions, plus first residential keys (Twin Rooms), open to the Great Hall void.',
+  rooms:[['Relaxing Area & Breakfast Hall','100 m²'],['Twin Rooms','20–60 m²']]},
+ {id:'first',name:'First Floor',lv:'+7.1 m',ex:'plans/existing/first.jpg',pr:'plans/proposed/first.jpg',circ:'plans/circ/first.jpg',
+  exUse:'Bank offices around the central core.',
+  prUse:'Residential — Gaming King Rooms around the central spiral stair / void. Smart lighting, reversible themed fixtures, Part M (850 mm doors, 1500 mm turning).',
+  rooms:[['Gaming King Rooms','20–60 m² ea'],['Central Spiral Stair / Void','—']]},
+ {id:'second',name:'Second Floor',lv:'+11.6 m',ex:'plans/existing/second.jpg',pr:'plans/proposed/second.jpg',circ:'plans/circ/second.jpg',
+  exUse:'Bank offices.',
+  prUse:'Gaming Studio — display figures, board-game tables and a PC battlestation row. Freestanding setups preserve listed features.',
+  rooms:[['Gaming Studio (figures · board · PC)','40 m²'],['Gaming Bedrooms','—']]},
+ {id:'third',name:'Third Floor',lv:'+15.0 m',ex:'plans/existing/third.jpg',pr:'plans/proposed/third.jpg',circ:'plans/circ/third.jpg',
+  exUse:'Bank offices; listed sloping roof-lights.',
+  prUse:'Gaming Studio + Cinema Room, plus Gaming Queen Rooms. Non-invasive AV respects the listed structure.',
+  rooms:[['Gaming Studio + Cinema','34 m²'],['Gaming Queen Rooms','20–60 m² ea']]},
+ {id:'fourth',name:'Fourth Floor',lv:'+18.6 m',ex:'plans/existing/fourth.jpg',pr:'plans/proposed/fourth.jpg',circ:'plans/circ/fourth.jpg',
+  exUse:'Bank offices / roof level.',
+  prUse:'Top residential floor — gaming bedrooms incl. an accessible key (1500 mm turning). 35-key residential programme completes here.',
+  rooms:[['Gaming Bedrooms','22–34 m²'],['Accessible Bedroom (Part M)','34 m²']]},
+ {id:'fifth',name:'Fifth Floor',lv:'+21.3 m',ex:null,pr:'plans/proposed/fifth.jpg',
+  exUse:'Roof / plant level (no survey plan).',
+  prUse:'Pet-Friendly Gaming Studio — accessible seating + pet amenities, reversible features protect heritage fabric.',
+  rooms:[['Pet-Friendly Gaming Studio','50 m²']]},
+ {id:'elevation',name:'Elevation',lv:'Castle St',ex:'plans/existing/elevation.jpg',pr:'plans/proposed/elevation.jpg',
+  exUse:'Surveyed Castle Street elevation — granite base, terracotta mullions, rusticated stone.',
+  prUse:'Proposed elevation — heritage façade retained; grey/pale granite, terracotta, rusticated stone over five storeys.',
+  rooms:[]},
+ {id:'section',name:'Section',lv:'Levels',ex:null,pr:'plans/proposed/section.jpg',
+  exUse:'See building section for surveyed level heights.',
+  prUse:'Building section indicating floor levels and heights, basement −4 m to roof +21 m.',
+  rooms:[]},
+];
+
+let cur=F[1], mode='compare', view={s:1,x:0,y:0};
+const $=id=>document.getElementById(id);
+
+// floor rail
+const fl=$('floors');
+F.forEach(f=>{ const el=document.createElement('div'); el.className='fl'; el.dataset.id=f.id;
+  el.innerHTML='<div class="n">'+f.name+'</div><div class="lv">'+f.lv+'</div>';
+  el.onclick=()=>{cur=f;render();}; fl.appendChild(el); });
+
+document.querySelectorAll('.mode[data-m]').forEach(b=>b.onclick=()=>{mode=b.dataset.m;render();});
+let circOn=false;
+$('circBtn').onclick=()=>{ circOn=!circOn; if(circOn)mode='proposed'; render(); };
+
+function render(){
+  document.querySelectorAll('.fl').forEach(e=>e.classList.toggle('on',e.dataset.id===cur.id));
+  document.querySelectorAll('.mode').forEach(e=>e.classList.toggle('on',e.dataset.m===mode));
+  $('vtitle').textContent=cur.name+' · '+cur.lv;
+  const codes={basement:'B1',ground:'00','hall-int':'I1','cafe-int':'I2',mezzanine:'M1',first:'01',second:'02',third:'03',fourth:'04',fifth:'05',elevation:'EL',section:'SC'};
+  $('dwgtag').innerHTML='DWG <b>ZK-'+(codes[cur.id]||'00')+'</b> · '+cur.name.toUpperCase();
+  // panels
+  const amax=Math.max(1,...cur.rooms.map(r=>parseInt((String(r[1]).match(/\d+/)||[0])[0],10)));
+  $('info').className='rail-right fade'; void $('info').offsetWidth;
+  $('info').innerHTML='<h2>'+cur.name+'</h2><div class="lvl">LEVEL '+cur.lv+'</div>'+
+    '<div class="trans"><div class="box ex"><div class="lab">Existing</div><div class="v">'+cur.exUse+'</div></div>'+
+    '<div class="box pr"><div class="lab">Proposed</div><div class="v">'+cur.prUse+'</div></div></div>'+
+    (cur.rooms.length?'<h4>Proposed Programme</h4>'+cur.rooms.map(r=>{
+        const n=parseInt((String(r[1]).match(/\d+/)||[0])[0],10);
+        const w=n?Math.max(10,Math.round(n/amax*100)):0;
+        return '<div class="rm"><div class="rmtop"><span>'+r[0]+'</span><span class="a">'+r[1]+'</span></div>'+(w?'<div class="bar"><i style="width:'+w+'%"></i></div>':'')+'</div>';
+      }).join(''):'')+
+    '<div class="note">Existing = surveyed NatWest drawings. Proposed = the Z’s Karam scheme. Heritage fabric retained throughout; interventions reversible.</div>';
+  // image area
+  const hasEx=!!cur.ex, hasPr=!!cur.pr;
+  $('single').style.display='none'; $('cmp').classList.remove('on'); $('empty').style.display='none';
+  let m=mode;
+  if(m==='compare' && !(hasEx&&hasPr)) m = hasPr?'proposed':(hasEx?'existing':'none');
+  if(m==='existing'){ if(hasEx){ $('img').src=cur.ex; $('single').style.display='flex'; } else showEmpty('No existing survey drawing for this level.'); }
+  else if(m==='proposed'){ if(hasPr){ $('img').src=cur.pr; $('single').style.display='flex'; } else showEmpty('Proposed shown in the axonometric / section sheets for this level.'); }
+  else if(m==='compare'){ $('cmpEx').src=cur.ex; $('cmpPr').src=cur.pr; $('cmp').classList.toggle('interior',!!cur.interior); $('cmp').classList.add('on'); setWipe(50); }
+  else showEmpty('No drawing available for this view.');
+  // circulation overlay (green hallways, animated) — only on the proposed plan
+  const cimg=$('circImg'); const canCirc=!!cur.circ;
+  $('circBtn').style.opacity=canCirc?'1':'.4';
+  if(circOn && canCirc && m==='proposed'){ cimg.src=cur.circ; cimg.classList.add('on'); $('circBtn').classList.add('on'); }
+  else { cimg.classList.remove('on'); $('circBtn').classList.toggle('on',circOn&&canCirc); }
+  resetZoom();
+}
+function showEmpty(t){ $('empty').textContent=t; $('empty').style.display='block'; }
+
+// wipe slider
+let wipePct=50;
+function setWipe(pct){ wipePct=pct; $('cmp').style.setProperty('--wipe',pct+'%'); $('divider').style.left=pct+'%'; }
+// keyboard: ↑/↓ change floor · ←/→ slide the wipe · 1/2/3 modes
+addEventListener('keydown',e=>{ const i=F.indexOf(cur);
+  if(e.key==='ArrowDown'){cur=F[Math.min(F.length-1,i+1)];render();e.preventDefault();}
+  else if(e.key==='ArrowUp'){cur=F[Math.max(0,i-1)];render();e.preventDefault();}
+  else if(e.key==='ArrowRight'&&mode==='compare'){setWipe(Math.min(98,wipePct+4));e.preventDefault();}
+  else if(e.key==='ArrowLeft'&&mode==='compare'){setWipe(Math.max(2,wipePct-4));e.preventDefault();}
+  else if(e.key==='1'){mode='existing';render();} else if(e.key==='2'){mode='compare';render();} else if(e.key==='3'){mode='proposed';render();}
+});
+let wd=false;
+$('divider').addEventListener('pointerdown',e=>{wd=true;e.preventDefault();});
+addEventListener('pointermove',e=>{ if(!wd)return; const r=$('view').getBoundingClientRect();
+  let pct=(e.clientX-r.left)/r.width*100; pct=Math.max(2,Math.min(98,pct)); setWipe(pct); });
+addEventListener('pointerup',()=>wd=false);
+
+// zoom/pan on single image
+function resetZoom(){view={s:1,x:0,y:0};applyZoom();}
+function applyZoom(){const t=`translate(${view.x}px,${view.y}px) scale(${view.s})`;$('img').style.transform=t;$('circImg').style.transform='translate(-50%,-50%) '+t;}
+$('zi').onclick=()=>{view.s=Math.min(6,view.s*1.3);applyZoom();};
+$('zo').onclick=()=>{view.s=Math.max(1,view.s/1.3);if(view.s===1){view.x=0;view.y=0}applyZoom();};
+$('zf').onclick=resetZoom;
+let pd=null;
+$('single').addEventListener('pointerdown',e=>{pd={x:e.clientX,y:e.clientY,ox:view.x,oy:view.y};});
+addEventListener('pointermove',e=>{if(!pd)return;view.x=pd.ox+(e.clientX-pd.x);view.y=pd.oy+(e.clientY-pd.y);applyZoom();});
+addEventListener('pointerup',()=>pd=null);
+$('single').addEventListener('wheel',e=>{e.preventDefault();view.s=Math.max(1,Math.min(6,view.s*(e.deltaY<0?1.12:.9)));if(view.s===1){view.x=0;view.y=0}applyZoom();},{passive:false});
+
+render();
+</script>
+</body>
+</html>
