@@ -104,6 +104,41 @@ header a.hub:hover{border-color:var(--gold);color:var(--gold2);background:rgba(2
 .note{font-size:10px;color:var(--ink3);line-height:1.55;margin-top:12px;font-style:italic;padding-top:10px;border-top:1px solid var(--hair)}
 .fade{animation:fade .35s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* ---------- SMARTPHONE LAYOUT ---------- */
+@media(max-width:760px){
+ html,body{font-size:13px}
+ .app{height:100vh;height:100dvh}
+ .body{display:flex;flex-direction:column;min-height:0}
+ .rail-right{display:none}.hud{display:none}
+ header{padding:0 12px;gap:10px}
+ header .s{display:none}
+ header a.hub{padding:7px 11px;font-size:11px}
+ /* floor list becomes a horizontal chip strip pinned at top */
+ .rail{order:-1;flex:0 0 auto;display:flex;align-items:center;gap:6px;overflow-x:auto;overflow-y:hidden;border-right:0;border-bottom:1px solid var(--line);padding:8px 10px;-webkit-overflow-scrolling:touch}
+ .rail::-webkit-scrollbar{display:none}
+ .rail h3{display:none}
+ #floors{display:flex;gap:6px}
+ .fl{flex:0 0 auto;flex-direction:column;align-items:flex-start;gap:1px;margin:0;padding:7px 11px;border:1px solid var(--hair);border-radius:9px;white-space:nowrap}
+ .fl:before{display:none}
+ .fl .n{font-size:11px}.fl .lv{font-size:8px}
+ /* image stage now full width */
+ .stage{flex:1;min-height:0}
+ .modebar{flex-wrap:wrap;gap:5px;padding:8px 10px}
+ .mode{font-size:9px;padding:7px 10px}
+ #circBtn{margin-left:4px}
+ .modebar .title{display:none}
+ .view{min-height:46vh}
+ /* FIT the whole drawing on screen — incl. interior before/after (was cropped) */
+ .imgwrap img{max-width:96%;max-height:96%}
+ #cmp .layer img{max-width:96%;max-height:96%}
+ #cmp.interior .layer img{object-fit:contain;width:auto;height:auto;max-width:96%;max-height:96%}
+ .bracket{width:18px;height:18px}
+ .dwgtag{font-size:8px;padding:5px 8px;left:12px;bottom:12px}
+ .scalenote{display:none}
+ /* zoom controls -> bottom-right thumb zone */
+ .zoomctl{right:12px;left:auto;top:auto;bottom:12px;transform:none;flex-direction:row;gap:8px}
+ .zoomctl button{width:40px;height:40px;font-size:18px}
+}
 </style>
 </head>
 <body>
