@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2">
 <meta name="theme-color" content="#06080c">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <title>Z'S KARAM HOTEL — Interactive 3D Model</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -57,6 +57,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:c
 #bar{width:260px;height:6px;background:#1a1f2a;border-radius:4px;overflow:hidden}
 #bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .2s}
 #load .pct{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3)}
+#load{transition:opacity .55s ease}
+#load.done{opacity:0;pointer-events:none}
+#load .t.liveon{color:#46c486;letter-spacing:.3em}
+.lvdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#46c486;box-shadow:0 0 12px #46c486;margin-right:9px;vertical-align:middle;animation:lvp 1.4s infinite}
+@keyframes lvp{50%{opacity:.3}}
+#liveBadge{position:fixed;top:14px;right:16px;z-index:26;display:none;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#46c486;background:rgba(9,18,14,.62);border:1px solid rgba(70,196,134,.42);border-radius:8px;padding:7px 11px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#liveBadge.show{display:flex;animation:lbin .5s ease both}
+@keyframes lbin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+#liveBadge i{width:7px;height:7px;border-radius:50%;background:#46c486;box-shadow:0 0 8px #46c486;animation:lvp 1.4s infinite}
 #err{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:40;background:#3a1414;border:1px solid #5a2a2a;
   color:#ffd;font-size:11px;padding:10px 14px;border-radius:8px;display:none;max-width:80%;text-align:center;font-family:'JetBrains Mono',monospace}
 .hint{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:9;font-family:'JetBrains Mono',monospace;
@@ -111,6 +120,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:c
   <div class="brand"><div class="t">Z'S KARAM HOTEL</div><div class="s">Interactive Model · former NatWest Bank · Castle Street</div></div>
   <div class="tag">LISTED BUILDING · LIVERPOOL</div>
 </header>
+
+<div id="liveBadge"><i></i>LIVE</div>
 
 <div id="tabs">
   <button class="tab on" data-tab="model">◆ 3D MODEL</button>
@@ -6293,7 +6304,7 @@ function onModel(o){
     model=o; scene.add(o); box=new THREE.Box3().setFromObject(o); modelBox=box.clone();
     const c2=box.getCenter(new THREE.Vector3()),sz=box.getSize(new THREE.Vector3());
     controls.target.copy(c2); homeView=()=>{camera.position.set(c2.x+sz.x*0.85,c2.y+sz.y*0.85,c2.z-sz.z*1.2);};
-    buildContext(box); homeView(); controls.update(); document.getElementById('load').style.display='none'; return;
+    buildContext(box); homeView(); controls.update(); finishLoad(); return;
   }
   // ---- PBR conversion (physically-based + image-based lighting, like Enscape/Lumion fundamentals; tame pure-white albedo so it stops blowing out) ----
   o.traverse(m=>{ if(m.isMesh){ m.castShadow=true; m.receiveShadow=true;
@@ -6324,9 +6335,23 @@ function onModel(o){
   homeView=()=>{camera.position.set(c2.x+sz.x*0.85,c2.y+sz.y*0.85,c2.z-sz.z*1.2);}; // 3/4 street view
   buildContext(box);
   homeView(); controls.update();
-  document.getElementById('load').style.display='none';
+  finishLoad();
 }
 let homeView=()=>{};
+// GTA-style finish: bar reaches 100%, flips to a green "LIVE" state, then fades to
+// reveal the walkthrough. Wrapped so the model ALWAYS reveals even if anything throws.
+function finishLoad(){
+  try{
+    const L=document.getElementById('load'); if(!L)return;
+    const t=L.querySelector('.t'), s=L.querySelector('.s'), pct=document.getElementById('pct'),
+          bi=document.querySelector('#bar i'), badge=document.getElementById('liveBadge');
+    if(bi)bi.style.width='100%'; if(pct)pct.textContent='100%';
+    if(t){t.classList.add('liveon'); t.innerHTML='<span class="lvdot"></span>LIVE';}
+    if(s)s.textContent='Walkthrough ready — drag to look around.';
+    if(badge)badge.classList.add('show');
+    setTimeout(()=>{ L.classList.add('done'); setTimeout(()=>{ L.style.display='none'; },600); }, 820);
+  }catch(e){ const L=document.getElementById('load'); if(L)L.style.display='none'; }
+}
 /* indicative Castle Street context — street + neighbouring terrace massing.
    (front of the building = the -Z face; the street runs along X in front of it) */
 function buildContext(box){
