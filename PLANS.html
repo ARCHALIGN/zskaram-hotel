@@ -106,9 +106,9 @@ header a.hub:hover{border-color:var(--gold);color:var(--gold2);background:rgba(2
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 /* ---------- SMARTPHONE LAYOUT ---------- */
 @media(max-width:760px){
- html,body{font-size:13px}
- .app{height:100vh;height:100dvh}
- .body{display:flex;flex-direction:column;min-height:0}
+ html,body{font-size:13px;max-width:100vw;overflow-x:hidden}
+ .app{height:100vh;height:100dvh;width:100vw;max-width:100vw;grid-template-columns:minmax(0,1fr);overflow:hidden}
+ .body{display:flex;flex-direction:column;min-height:0;min-width:0;width:100%;max-width:100vw;overflow:hidden}
  .rail-right{display:none}.hud{display:none}
  header{padding:0 12px;gap:10px}
  header .s{display:none}
@@ -128,10 +128,12 @@ header a.hub:hover{border-color:var(--gold);color:var(--gold2);background:rgba(2
  #circBtn{margin-left:4px}
  .modebar .title{display:none}
  .view{min-height:46vh}
- /* FIT the whole drawing on screen — incl. interior before/after (was cropped) */
- .imgwrap img{max-width:96%;max-height:96%}
- #cmp .layer img{max-width:96%;max-height:96%}
- #cmp.interior .layer img{object-fit:contain;width:auto;height:auto;max-width:96%;max-height:96%}
+ /* FIT the whole drawing on screen — bulletproof: image is tied to a clamped box,
+    so it can never overflow/clip; object-fit:contain keeps the full drawing visible */
+ .stage,.view,#cmp,#cmp .layer,.imgwrap{min-width:0;max-width:100%;overflow:hidden}
+ .imgwrap{inset:8px 8px 44px}
+ #cmp .layer{padding:8px 8px 44px}
+ .imgwrap img,#cmp .layer img,#cmp.interior .layer img{width:100%;height:100%;object-fit:contain;max-width:100%;max-height:100%;background:transparent;border-radius:0;box-shadow:none}
  .bracket{width:18px;height:18px}
  .dwgtag{font-size:8px;padding:5px 8px;left:12px;bottom:12px}
  .scalenote{display:none}
@@ -312,6 +314,9 @@ addEventListener('pointermove',e=>{if(!pd)return;view.x=pd.ox+(e.clientX-pd.x);v
 addEventListener('pointerup',()=>pd=null);
 $('single').addEventListener('wheel',e=>{e.preventDefault();view.s=Math.max(1,Math.min(6,view.s*(e.deltaY<0?1.12:.9)));if(view.s===1){view.x=0;view.y=0}applyZoom();},{passive:false});
 
+// On phones the side-by-side wipe of two white drawings reads as empty/broken —
+// default to a single clean PROPOSED drawing; COMPARE is still one tap away.
+if(window.matchMedia && window.matchMedia('(max-width:760px)').matches){ mode='proposed'; }
 render();
 </script>
 </body>
