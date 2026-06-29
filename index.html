@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2,viewport-fit=cover">
 <meta name="theme-color" content="#06080c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -21,7 +21,7 @@ html,body{height:100%;background:#06080c;color:#e7ecf3;font-family:'Inter',syste
 .scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:
   radial-gradient(130% 100% at 50% 36%, rgba(6,8,12,0) 22%, rgba(6,8,12,.5) 66%, rgba(4,5,9,.92) 100%),
   linear-gradient(180deg, rgba(5,7,11,.8) 0%, rgba(6,8,12,.03) 22%, rgba(6,8,12,.02) 52%, rgba(4,5,9,.9) 100%)}
-.inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:5vh 18px 4vh;text-align:center}
+.inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:5vh 18px calc(4vh + var(--safe-bottom,0px));text-align:center}
 .brandlogo{height:clamp(116px,18vh,186px);width:auto;filter:drop-shadow(0 6px 30px rgba(0,0,0,.85)) drop-shadow(0 0 26px rgba(231,200,120,.26));animation:fadeDown 1s ease both}
 .tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.28em;color:#d7deec;text-shadow:0 1px 12px rgba(0,0,0,.95);margin-top:13px;animation:fadeDown 1.2s ease both}
 /* vertical AAA-style menu (no circles) */
@@ -49,7 +49,7 @@ html,body{height:100%;background:#06080c;color:#e7ecf3;font-family:'Inter',syste
 .starthint{font-family:'Press Start 2P',monospace;font-size:9px;letter-spacing:.12em;color:var(--gold2);text-shadow:0 0 16px rgba(231,200,120,.55);animation:blinkH 1.5s steps(2) infinite}
 @keyframes blinkH{50%{opacity:.22}}
 /* ---- SURVEY — Game Boy live feed (one fullscreen autoplay, loops forever) ---- */
-#surveyFs{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;
+#surveyFs{position:absolute;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding-bottom:var(--safe-bottom,0px);
   background:#06070a;background-image:radial-gradient(circle at 50% 20%,rgba(227,192,127,.10),transparent 60%);font-family:'JetBrains Mono',monospace}
 #surveyFs.show{display:flex}
 .gbconsole{position:relative;width:min(94%,1180px);background:linear-gradient(180deg,rgba(20,23,30,.72),rgba(10,12,17,.84));border:1px solid rgba(227,192,127,.18);border-radius:18px;
@@ -178,6 +178,14 @@ document.getElementById('gbPrev').onclick=()=>{ ci=(ci-1+CLIPS.length)%CLIPS.len
 document.getElementById('gbNext').onclick=()=>{ ci=(ci+1)%CLIPS.length; playClip(); };
 document.getElementById('gbPlay').onclick=function(){ if(surveyVid.paused){surveyVid.play();this.textContent='|| PAUSE';} else {surveyVid.pause();this.textContent='|> PLAY';} };
 document.getElementById('gbMute').onclick=function(){ surveyVid.muted=!surveyVid.muted; this.textContent='SOUND: '+(surveyVid.muted?'OFF':'ON'); };
+
+// Keep bottom UI (menu start cue, survey controls) clear of Safari's bottom bar.
+function setSafeBottom(){try{var px=8,inFrame=false;try{inFrame=(window.self!==window.top);}catch(e){inFrame=true;}
+  if(inFrame){px=100;}else if(window.visualViewport){var vv=window.visualViewport;px=Math.max(8,Math.round(window.innerHeight-vv.height-vv.offsetTop)+8);}
+  document.documentElement.style.setProperty('--safe-bottom',px+'px');}catch(e){}}
+setSafeBottom();
+if(window.visualViewport){visualViewport.addEventListener('resize',setSafeBottom);visualViewport.addEventListener('scroll',setSafeBottom);}
+window.addEventListener('orientationchange',setSafeBottom);window.addEventListener('resize',setSafeBottom);
 </script>
 </body>
 </html>
