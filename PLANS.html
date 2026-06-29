@@ -276,11 +276,15 @@ function render(){
   else if(m==='proposed'){ if(hasPr){ $('img').src=cur.pr; $('single').style.display='flex'; } else showEmpty('Proposed shown in the axonometric / section sheets for this level.'); }
   else if(m==='compare'){ $('cmpEx').src=cur.ex; $('cmpPr').src=cur.pr; $('cmp').classList.toggle('interior',!!cur.interior); $('cmp').classList.add('on'); setWipe(50); }
   else showEmpty('No drawing available for this view.');
-  // circulation overlay (green hallways, animated) — only on the proposed plan
+  // circulation: the circ drawing IS the proposed plan with the hallways painted
+  // green (same registration/size), so we show it directly in place of the plain
+  // proposed plan — the colour always lands exactly on the hallway path. No overlay
+  // = no misalignment. Only meaningful on the proposed plan.
   const cimg=$('circImg'); const canCirc=!!cur.circ;
+  cimg.classList.remove('on');
   $('circBtn').style.opacity=canCirc?'1':'.4';
-  if(circOn && canCirc && m==='proposed'){ cimg.src=cur.circ; cimg.classList.add('on'); $('circBtn').classList.add('on'); }
-  else { cimg.classList.remove('on'); $('circBtn').classList.toggle('on',circOn&&canCirc); }
+  if(circOn && canCirc && m==='proposed'){ $('img').src=cur.circ; $('single').style.display='flex'; $('cmp').classList.remove('on'); $('empty').style.display='none'; $('circBtn').classList.add('on'); }
+  else { $('circBtn').classList.toggle('on',circOn&&canCirc); }
   resetZoom();
 }
 function showEmpty(t){ $('empty').textContent=t; $('empty').style.display='block'; }
