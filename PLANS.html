@@ -240,7 +240,9 @@ const F=[
   rooms:[]},
 ];
 
-let cur=F[1], mode='compare', view={s:1,x:0,y:0};
+// Display order: before/after interiors → elevation → section → plans (basement→top)
+(function(){const ord=['hall-int','cafe-int','elevation','section','basement','ground','mezzanine','first','second','third','fourth','fifth'];const byId=Object.fromEntries(F.map(f=>[f.id,f]));const out=[];ord.forEach(id=>{if(byId[id])out.push(byId[id]);});F.forEach(f=>{if(!ord.includes(f.id))out.push(f);});F.length=0;F.push(...out);})();
+let cur=F[0], mode='compare', view={s:1,x:0,y:0};
 const $=id=>document.getElementById(id);
 
 // floor rail
@@ -277,7 +279,7 @@ function render(){
   let m=mode;
   if(m==='compare' && !(hasEx&&hasPr)) m = hasPr?'proposed':(hasEx?'existing':'none');
   if(m==='existing'){ if(hasEx){ $('img').src=cur.ex; $('single').style.display='flex'; } else showEmpty('No existing survey drawing for this level.'); }
-  else if(m==='proposed'){ if(hasPr){ $('img').src=cur.pr; $('single').style.display='flex'; } else showEmpty('Proposed shown in the axonometric / section sheets for this level.'); }
+  else if(m==='proposed'){ if(hasPr){ $('img').src=cur.pr; $('single').style.display='flex'; } else if(hasEx){ $('img').src=cur.ex; $('single').style.display='flex'; } else showEmpty('No drawing available for this level.'); }
   else if(m==='compare'){ $('cmpEx').src=cur.ex; $('cmpPr').src=cur.pr; $('cmp').classList.toggle('interior',!!cur.interior); $('cmp').classList.add('on'); setWipe(50); }
   else showEmpty('No drawing available for this view.');
   // circulation: the circ drawing IS the proposed plan with the hallways painted
@@ -329,9 +331,6 @@ addEventListener('pointermove',e=>{if(!pd)return;view.x=pd.ox+(e.clientX-pd.x);v
 addEventListener('pointerup',()=>pd=null);
 $('single').addEventListener('wheel',e=>{e.preventDefault();view.s=Math.max(1,Math.min(6,view.s*(e.deltaY<0?1.12:.9)));if(view.s===1){view.x=0;view.y=0}applyZoom();},{passive:false});
 
-// On phones the side-by-side wipe of two white drawings reads as empty/broken —
-// default to a single clean PROPOSED drawing; COMPARE is still one tap away.
-if(window.matchMedia && window.matchMedia('(max-width:760px)').matches){ mode='proposed'; }
 render();
 </script>
 </body>
