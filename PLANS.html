@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#06080c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Z'S KARAM HOTEL — Existing vs Proposed</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -65,7 +68,8 @@ header a.hub:hover{border-color:var(--gold);color:var(--gold2);background:rgba(2
 .imgwrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
 .imgwrap img{max-width:94%;max-height:94%;object-fit:contain;background:#fff;border-radius:3px;box-shadow:0 22px 64px rgba(0,0,0,.66),0 0 0 1px rgba(201,161,74,.12);user-select:none;-webkit-user-drag:none}
 /* compare wipe */
-#cmp{position:absolute;inset:0;display:none;z-index:2}
+#cmp{position:absolute;inset:0;display:none;z-index:2;touch-action:none}
+#cmp.on{cursor:ew-resize}
 #cmp.on{display:block}
 #cmp .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #cmp .layer img{max-width:94%;max-height:94%;object-fit:contain;background:#fff;border-radius:3px;box-shadow:0 22px 64px rgba(0,0,0,.6)}
@@ -300,11 +304,18 @@ addEventListener('keydown',e=>{ const i=F.indexOf(cur);
   else if(e.key==='ArrowLeft'&&mode==='compare'){setWipe(Math.max(2,wipePct-4));e.preventDefault();}
   else if(e.key==='1'){mode='existing';render();} else if(e.key==='2'){mode='compare';render();} else if(e.key==='3'){mode='proposed';render();}
 });
+// Smooth before/after wipe — drag anywhere on the compare view. Pointer capture
+// keeps the gesture locked to the slider (no glitch/jump), touch-action:none stops
+// the browser stealing the drag for a scroll.
 let wd=false;
-$('divider').addEventListener('pointerdown',e=>{wd=true;e.preventDefault();});
-addEventListener('pointermove',e=>{ if(!wd)return; const r=$('view').getBoundingClientRect();
-  let pct=(e.clientX-r.left)/r.width*100; pct=Math.max(2,Math.min(98,pct)); setWipe(pct); });
-addEventListener('pointerup',()=>wd=false);
+const _cmpEl=$('cmp');
+function wipeAt(clientX){ const r=$('view').getBoundingClientRect(); if(!r.width)return; let pct=(clientX-r.left)/r.width*100; setWipe(Math.max(2,Math.min(98,pct))); }
+_cmpEl.addEventListener('pointerdown',e=>{ if(!_cmpEl.classList.contains('on'))return; wd=true; try{_cmpEl.setPointerCapture(e.pointerId);}catch(_){ } wipeAt(e.clientX); e.preventDefault(); });
+_cmpEl.addEventListener('pointermove',e=>{ if(!wd)return; wipeAt(e.clientX); e.preventDefault(); });
+function _endWipe(e){ if(!wd)return; wd=false; try{_cmpEl.releasePointerCapture(e.pointerId);}catch(_){ } }
+_cmpEl.addEventListener('pointerup',_endWipe);
+_cmpEl.addEventListener('pointercancel',_endWipe);
+_cmpEl.addEventListener('lostpointercapture',()=>{wd=false;});
 
 // zoom/pan on single image
 function resetZoom(){view={s:1,x:0,y:0};applyZoom();}

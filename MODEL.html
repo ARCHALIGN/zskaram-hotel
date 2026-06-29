@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2">
-<title>Z'S KARAM HOTEL — Real 3D Model</title>
+<meta name="theme-color" content="#06080c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Z'S KARAM HOTEL — Interactive 3D Model</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
@@ -105,7 +108,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:c
 
 <header>
   <button id="btnMenu">‹ MENU</button>
-  <div class="brand"><div class="t">Z'S KARAM HOTEL</div><div class="s">Real 3D Model · former NatWest Bank · Castle St</div></div>
+  <div class="brand"><div class="t">Z'S KARAM HOTEL</div><div class="s">Interactive Model · former NatWest Bank · Castle Street</div></div>
   <div class="tag">LISTED BUILDING · LIVERPOOL</div>
 </header>
 
@@ -143,8 +146,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:c
 </div>
 
 <div id="load">
-  <div class="t">LOADING YOUR REAL MODEL</div>
-  <div class="s">Streaming the actual SketchUp building mesh (24 MB) with its real granite, marble &amp; glass materials. First load takes a few seconds.</div>
+  <div class="t">Z'S KARAM HOTEL</div>
+  <div class="s">Preparing your interactive walkthrough of the restored Castle Street landmark — rendered in full architectural detail.</div>
   <div id="bar"><i></i></div>
   <div class="pct" id="pct">0%</div>
 </div>
@@ -6228,7 +6231,7 @@ function loadModel(){
   const gzEl=document.getElementById('objGz');
   if(gzEl && gzEl.textContent.trim().length>200){
     if(!('DecompressionStream' in window)){ showErr('This browser is too old for the built-in 3D. Use ▶ VIEW 3D MODEL.bat.'); return; }
-    document.querySelector('#load .s').textContent='Unpacking the real textured model — no server needed…';
+    document.querySelector('#load .s').textContent='Assembling the building…';
     loadInline(); return;
   }
   // fallback (only if the model was not embedded): needs the local server
@@ -6237,7 +6240,7 @@ function loadModel(){
     document.querySelector('#load .s').innerHTML='This copy has no embedded model. Start <b style="color:#e7c878">▶ VIEW 3D MODEL.bat</b>.';
     document.getElementById('bar').style.display='none'; document.getElementById('pct').style.display='none'; return;
   }
-  document.querySelector('#load .s').textContent='Loading your real textured shell…';
+  document.querySelector('#load .s').textContent='Rendering materials and detail…';
   loadOBJ(onProg);
 }
 async function loadInline(){
