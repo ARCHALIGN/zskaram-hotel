@@ -74,13 +74,22 @@ header{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:c
 #lightbox .nav{position:absolute;top:50%;transform:translateY(-50%);font-size:30px;color:var(--ink2);cursor:pointer;padding:20px;user-select:none}
 #lightbox .nav:hover{color:var(--gold2)}#lprev{left:8px}#lnext{right:8px}
 #lightbox .cap{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink2)}
-@media(max-width:760px){#mats{display:none}.tool{min-width:104px}#tabs{top:auto;bottom:74px}}
+@media(max-width:760px){
+ header{padding:9px 12px}.brand .t{font-size:12px;letter-spacing:.12em}.brand .s{font-size:7.5px}.tag{font-size:7.5px;padding:5px 8px}
+ #tabs{top:46px;bottom:auto;transform:translateX(-50%) scale(.92)}
+ #mats{display:none}
+ #tools{left:0;right:0;bottom:0;flex-direction:row;align-items:stretch;gap:6px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,rgba(7,10,15,.96) 55%,transparent);z-index:24;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+ #tools::-webkit-scrollbar{display:none}
+ .tool{min-width:auto;flex:0 0 auto;font-size:9px;padding:9px 13px;text-align:center;border-radius:8px}
+ .tool small{display:none}
+ #sun{flex:0 0 auto;min-width:128px;font-size:8px}
+}
 /* on-screen D-pad — tap/hold to move (great on phones) */
 #dpad{position:fixed;right:18px;bottom:84px;z-index:25;display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:7px;touch-action:none;user-select:none;-webkit-user-select:none}
 #dpad .dp{display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--gold2);background:rgba(13,17,26,.82);border:1px solid rgba(201,161,74,.42);border-radius:12px;cursor:pointer;backdrop-filter:blur(5px);box-shadow:0 4px 14px rgba(0,0,0,.4);transition:background .08s,color .08s}
 #dpad .dp.held,#dpad .dp:active{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#0a0c10}
 #dpad .up{grid-column:2;grid-row:1}#dpad .left{grid-column:1;grid-row:2}#dpad .ctr{grid-column:2;grid-row:2;font-size:8px;color:var(--ink3);border-style:dashed;cursor:default}#dpad .right{grid-column:3;grid-row:2}#dpad .down{grid-column:2;grid-row:3}
-@media(max-width:760px){#dpad{right:50%;transform:translateX(50%);bottom:18px;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(3,58px)}.hint{display:none}}
+@media(max-width:760px){#dpad{right:10px;left:auto;transform:none;bottom:66px;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px);gap:5px}#dpad .dp{font-size:18px;border-radius:11px}.hint{display:none}}
 </style>
 </head>
 <body>
@@ -6150,9 +6159,9 @@ const view=document.getElementById('view');
 function initThree(){
   if(typeof THREE==='undefined'){showErr("three.js not found — open via the PLAY file / a real browser");return false;}
   renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});
-  renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+  renderer.setPixelRatio(window.innerWidth<760?1:Math.min(2,window.devicePixelRatio||1));
   renderer.setSize(innerWidth,innerHeight);
-  renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.shadowMap.enabled=window.innerWidth>=760; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   renderer.outputEncoding=THREE.sRGBEncoding;
   renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=0.98;
   view.appendChild(renderer.domElement);
@@ -6174,8 +6183,8 @@ function initThree(){
   scene.add(new THREE.HemisphereLight(0xc9dcff,0x4a443a,0.42));
   scene.add(new THREE.AmbientLight(0xffffff,0.05));
   sun=new THREE.DirectionalLight(0xffe8c2,3.3);
-  setSun(135); sun.castShadow=true;
-  sun.shadow.mapSize.set(2048,2048); sun.shadow.bias=-0.0004;
+  setSun(135); sun.castShadow=window.innerWidth>=760;
+  sun.shadow.mapSize.set(1024,1024); sun.shadow.bias=-0.0004;
   sun.shadow.camera.near=1; sun.shadow.camera.far=700;
   const sd=130; Object.assign(sun.shadow.camera,{left:-sd,right:sd,top:sd,bottom:-sd});
   scene.add(sun); scene.add(sun.target);
